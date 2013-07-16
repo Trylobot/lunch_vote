@@ -1,0 +1,49 @@
+
+$font: "Segoe UI", Segoe, Tahoma, Geneva, sans-serif;
+
+$bg_color: #ffffff;
+$text_color: #787878;
+
+$menu_text_idle_color: #999999;
+$menu_text_active_color: #666666;
+$menu_text_current_idle_color: #666666;
+$menu_text_current_active_color: #999999;
+
+$accent_color: #db291f;
+$secondary_heading_color: #717171;
+
+$button_idle_bg_color: #eeeeee;
+$button_idle_text_color: #333333;
+$button_selected_bg_color: #dedede;
+$button_selected_text_color: #000000;
+$button_icon_img_url: url('fork_plate_knife-light_2.png');
+$button_action_img_url: url('arrow_right-light_2.png');
+$button_loader_img_url: url('loader-light_2.png');
+$button_icon_small_img_url: url('fork_plate_knife-small-light_2.png');
+$button_action_small_img_url: url('arrow_right-light_2.png');
+
+$bg_text_color: #dedede;
+
+$input_inactive_border: #c0c0c0;
+$input_inactive_text_color: $input_inactive_border;
+$input_active_border: $text_color;
+$input_active_text_color: $input_active_border;
+$input_focus_border: $accent_color;
+$input_focus_text_color: $button_selected_text_color;
+
+$loading_mask_color: rgba(201,201,201,0.75);
+$loading_modal_bg_color: #2b2b2b;
+$loading_modal_text_color: #c9c9c9;
+$loading_icon_img_url: url('loading-light_2.png');
+
+$chat_identicon_border_color: $input_inactive_border;
+
+$scrollbar_color: $input_inactive_border;
+
+$rating_star_img_url: url('rating_star-light_2.png');
+
+$options_icon_img_url: url('gear-light_2.png');
+$share_email_icon_img_url: url('envelope-light_2.png');
+
+$google_maps_icon_img_url: url('google_maps_icon_small.png');
+

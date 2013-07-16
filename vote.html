@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head><title>lunch vote!</title>
+<link href="style.min.css?1.1.0" rel="stylesheet">
+<script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+<script src="socket.io/socket.io.js"></script>
+<script src="libs.min.js?1.1.0"></script>
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-39146853-1']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();</script>
+<link rel="icon" type="image/png" href="favicon.png?1.1.0">
+</head>
+<body>
+<div class="vote_container">
+
+<div class="menu">
+	<div class="action_link options" data-bind="click:toggle_admin, css:{current:show_admin}">
+		<div class="icon options"></div><span>options</span>
+	</div>
+	<div class="action_link share_email">
+		<a data-bind="attr:{ href:'mailto:coworker@email.com?subject=lunch vote!&body=come help us decide where to go! '+location.href }" target="_blank">
+			<div class="icon share_email"></div><span>share</span>
+		</a>
+	</div>
+</div>
+
+<div class="vote_main" data-bind="visible:!show_admin()">
+	
+	<span data-bind="visible:current_poll()||next_poll_ts()">
+		<div class="countdown">
+			<span>000:00:00</span>
+			<div class="readout" data-bind="text:countdown_readout"></div>
+			<div class="note" data-bind="visible:current_poll">vote now</div>
+			<div class="note" data-bind="visible:!current_poll()&&next_poll_ts()">next vote</div>
+		</div>
+	</span>
+
+	<span data-bind="visible:next_poll_ts()&&previous_poll()&&!current_poll()">
+		<div class="divider"></div>
+	</span>
+
+	<span data-bind="visible:current_poll">
+		<div class="progress">
+			<div class="fill" data-bind="style:{ width:current_poll_progress_pct()+'%' }"></div>
+		</div>
+		<div class="filter_container" data-bind="css:{ active:filter()!='' }">
+			<input id="filter" title="filter restaurants" placeholder="filter restaurants" type="text" class="input filter" data-bind="value:filter, valueUpdate:'afterkeydown', css:{ active:filter()!='' }, click:select_text" tabindex="1">
+			<div class="clear_filter" title="clear filter" data-bind="click:clear_filter">X</div>
+		</div>
+		<div class="entity_list" data-bind="foreach:{ data:filtered_current_poll_entities, afterAdd:entity_list_afterRender }">
+			<div class="button send_vote" data-bind="click:$root.trigger_vote, attr:{ title:name }, css:{ selected:$root.vote()&&name==$root.vote().name }">
+				<span class="caption" data-bind="text:name"></span>
+				<div class="vote_count" data-bind="text:count>0?count:null"></div>
+			</div>
+		</div>
+	</span>
+
+	<span data-bind="visible:!current_poll()&&previous_poll()&&previous_poll_winner()">
+		<div class="message">winner!</div>
+		<div class="divider"></div>
+		<div class="entity_detail winner" data-bind="template:{ name:'entity_detail_template', data:previous_poll_winner, 'if':previous_poll_winner, afterRender:entity_detail_afterRender }"></div>
+		<script type="text/html" id="entity_detail_template">
+			<h1 class="name" data-bind="text:name"></h1>
+			<div class="note address" data-bind="text:address"></div>
+			<!-- ko if: phone -->
+			<div class="note phone_number" data-bind="text:phone"></div>
+			<!-- /ko -->
+			<!-- ko if: $data.loaded -->
+				<!-- ko if: $data.rating !== null -->
+			<div class="rating_and_reviews">
+				<div class="rating" data-bind="foreach:[0,1,2,3,4], attr:{ title:'rating: '+Math.round(rating*10)/10+'/5 stars' }">
+					<div class="star" data-bind="style:{ backgroundPosition:'0 -'+(Math.max(0,Math.min(1.0,Math.round($parent.rating*10)/10-$data))*280)+'px' }"></div>
+				</div>
+				<div class="note review_count">
+					<span data-bind="text:review_count"></span> checkin<span data-bind="text:review_count!=1?'s':''"></span>
+				</div>
+			</div>
+				<!-- /ko -->
+			<div class="categories" data-bind="text:categories.join(', ')"></div>
+			<!-- /ko -->
+			<!-- ko if: $root.previous_poll_winner_directions_url() -->
+			<a class="icon directions_link" title="directions" data-bind="attr:{ href:$root.previous_poll_winner_directions_url() }" target="_blank"></a>
+			<!-- /ko -->
+		</script>
+	</span>
+
+	<span data-bind="visible:!current_poll()&&previous_poll()&&!previous_poll_winner()">
+		<div class="message">no clear winner</div>
+	</span>
+
+	<span data-bind="visible:!current_poll()&&!previous_poll()&&!next_poll_ts()">
+		<div class="message">no poll data</div>
+	</span>
+
+</div>
+
+<div class="vote_secondary" data-bind="visible:!show_admin()">
+	
+	<span data-bind="visible:current_poll()">
+		<div class="entity_detail" data-bind="template:{ name:'entity_detail_template', data:entity_detail, 'if':entity_detail, afterRender:entity_detail_afterRender }"></div>
+	</span>
+
+	<div class="chatbox_container" data-bind="css:{ big:!entity_detail()||!current_poll() }">
+		<div class="chat_window" id="chat_window" >
+			<div class="chats" data-bind="foreach:{ data:chats, afterAdd:render_identicon }">
+				<div class="chat">
+					<img class="identicon">
+					<span data-bind="text:message"></span>
+				</div>
+			</div>
+		</div>
+		<input id="chat_input" title="send chat message" placeholder="send chat message" maxlength="256" type="text" class="input" data-bind="value:chat_input, valueUpdate:'afterkeydown', executeOnEnter:send_chat, css:{ active:chat_input()!='' }" tabindex="2">
+		<div class="user_count note">
+			<span data-bind="text:user_count"></span> user<span data-bind="text:user_count()!=1?'s':''"></span> online.
+		</div>
+	</div>
+
+</div>
+
+<div class="vote_admin" data-bind="visible:show_admin">
+
+	<div class="section vote_control clearfix">
+		<div class="field_group">
+			<div class="field">
+				<input id="add_poll_start_ts" title="when to start" placeholder="when to start" type="text" class="input" data-bind="value:add_poll_start_ts, valueUpdate:'afterkeydown', css:{ active:add_poll_start_ts()!='' }, enable:!zero_entities(), click:select_text, executeOnEnter:add_poll" tabindex="3">
+				<div class="note description" data-bind="css:{ hide:!add_poll_start_ts_datejs(), disabled:zero_entities }">
+					start &ndash; <span data-bind="text:add_poll_start_ts_datejs"></span>
+				</div>
+			</div>
+			<div class="field">
+				<div class="field small">
+					<input id="add_poll_duration" title="length" placeholder="length" type="text" class="input" data-bind="value:add_poll_duration, valueUpdate:'afterkeydown', css:{ active:add_poll_duration()!='' }, enable:!zero_entities(), click:select_text, executeOnEnter:add_poll" tabindex="4">
+					<div class="note description" data-bind="css:{ hide:!isNumber(add_poll_duration()), disabled:zero_entities }">vote time &ndash; minutes</div>
+				</div>
+				<div class="field small">
+					<input id="add_poll_runoff_duration" title="runoff length" placeholder="runoff length" type="text" class="input" data-bind="value:add_poll_runoff_duration, valueUpdate:'afterkeydown', css:{ active:add_poll_runoff_duration()!='' }, enable:!zero_entities(), click:select_text, executeOnEnter:add_poll" tabindex="5">
+					<div class="note description" data-bind="css:{ hide:!isNumber(add_poll_runoff_duration()), disabled:zero_entities }">runoff time &ndash; minutes</div>
+				</div>
+			</div>
+		</div>
+		<div class="field_group">
+			<div class="button add_poll" data-bind="click:add_poll, css:{ disabled:add_poll_form_invalid }">
+				<span class="caption">start vote!</span>
+				<div class="icon"></div>
+				<div class="action"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section future_polls clearfix" data-bind="visible:!zero_upcoming_polls()">
+		<div class="field_group">
+			<h2>vote times</h2>
+		</div>
+		<div class="field_group">
+			<div class="field">
+				<div class="future_poll_list" data-bind="foreach:upcoming_polls">
+					<div class="button cancel_poll" date-bind="click:cancel_poll">
+						<span class="caption" data-bind="text:str"></span>
+						<div class="delete" title="remove" data-bind="click:$root.cancel_poll">X</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section restaurant_settings clearfix">
+		<div class="field_group">
+			<h2><span title="start here!">settings</span></h2>
+			<div class="field">
+				<input id="config_location_input" title="starting address" placeholder="starting address" type="text" class="input" data-bind="value:config_location_input, valueUpdate:'afterkeydown', css:{ active:config_location_input()!='' }, hasfocus:config_location_has_focus, click:select_text" tabindex="6">
+				<div class="note description" data-bind="css:{ hide:config_location_has_focus()==false }">press enter<br>to set address</div>
+			</div>
+			<div class="field">
+				<input id="add_entity_input" title="add a nearby restaurant" placeholder="add a nearby restaurant" type="text" class="input" data-bind="value:add_entity_input, valueUpdate:'afterkeydown', css:{ active:add_entity_input()!='' }, hasfocus:add_entity_input_has_focus, click:select_text" tabindex="7">
+				<div class="note description" data-bind="css:{ hide:add_entity_input_has_focus()==false }">press enter<br>to add restaurant</div>
+			</div>
+			<div class="field">
+				<div class="entity_list" data-bind="foreach:{ data:config_entities, afterAdd:entity_list_afterRender }">
+					<div class="button select_entity" data-bind="click:$root.entity_detail, attr:{ title:name }, css:{ selected:$root.entity_detail()&&name==$root.entity_detail().name }">
+						<span class="caption" data-bind="text:name"></span>
+						<div class="delete" title="remove" data-bind="click:$root.remove_entity">X</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="field_group">
+			<div class="entity_detail" data-bind="template:{ name:'entity_detail_template', data:entity_detail, 'if':entity_detail, afterRender:entity_detail_afterRender }"></div>
+		</div>		
+	</div>
+
+</div>
+
+</div>
+
+<div class="loading_mask" data-bind="visible:loading">
+	<div class="loading_modal">
+		<span>connecting ...</span>
+		<div class="icon"></div>
+	</div>
+</div>
+
+<script src="script.min.js?1.1.0"></script>
+</body>
+</html>
