@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<img id="identicon" width="24" height="24">
+<script src="canvas_identicon.js"></script>
+<script src="sha-1.js"></script>
+<script>
+img = document.getElementById( 'identicon' );
+var hash = Sha1.hash( String(Math.random()) );
+img.setAttribute( 'data-identicon', hash ); 
+Identicon( img );
+</script>
+</body>
+</html>

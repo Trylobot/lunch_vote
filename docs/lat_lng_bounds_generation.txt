@@ -1,0 +1,7 @@
+NE: Rio Grande St @ W 22nd St, Austin, TX
+	30.285217,-97.744964
+
+SW: Pearl St @ W 21st St, Austin, TX
+	30.284162,-97.746622
+
+span: 0.001055,0.001658

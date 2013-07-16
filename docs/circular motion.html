@@ -1,0 +1,74 @@
+<html>
+<head>
+<style>
+body {
+	position: relative;
+	margin: 30px;
+}
+.path {
+	position: absolute;
+	top: -23px;
+	left: -23px;
+	width: 48px;
+	height: 48px;
+	border-radius: 48px;
+	border: 1px solid lightgray;
+}
+.circle {
+	position: absolute;
+	background: gray;
+	width: 4px;
+	height: 4px;
+	border-radius: 4px;
+}
+@-webkit-keyframes circular_r24 {
+0%{top:0px;left:24px}
+3.31126%{top:4.95732px;left:23.48244px}
+6.62252%{top:9.70083px;left:21.95208px}
+9.93377%{top:14.02593px;left:19.47494px}
+13.24503%{top:17.7461px;left:16.15784px}
+16.55629%{top:20.70089px;left:12.14386px}
+19.86755%{top:22.76285px;left:7.6061px}
+23.17881%{top:23.84304px;left:2.7403px}
+26.49007%{top:23.89489px;left:-2.24369px}
+29.80132%{top:22.91616px;left:-7.1309px}
+33.11258%{top:20.94905px;left:-11.71057px}
+36.42384%{top:18.07841px;left:-15.78516px}
+39.7351%{top:14.42805px;left:-19.17893px}
+43.04636%{top:10.1554px;left:-21.74552px}
+46.35762%{top:5.44476px;left:-23.37423px}
+49.66887%{top:0.4993px;left:-23.99481px}
+52.98013%{top:-4.46772px;left:-23.58049px}
+56.29139%{top:-9.24203px;left:-22.14915px}
+59.60265%{top:-13.61775px;left:-19.76252px}
+62.91391%{top:-17.40612px;left:-16.52352px}
+66.22517%{top:-20.44378px;left:-12.57188px}
+69.53642%{top:-22.59968px;left:-8.07802px}
+72.84768%{top:-23.78087px;left:-3.23574px}
+76.15894%{top:-23.9364px;left:1.7461px}
+79.4702%{top:-23.05955px;left:6.65262px}
+82.78146%{top:-21.18813px;left:11.27222px}
+86.09272%{top:-18.40288px;left:15.40565px}
+89.40397%{top:-14.82392px;left:18.87462px}
+92.71523%{top:-10.6056px;left:21.52954px}
+96.02649%{top:-5.92986px;left:23.2559px}
+99.33775%{top:-0.99836px;left:23.97923px}
+100%{top:0px;left:24px}
+}
+.circle.clockwise {
+	-webkit-animation-name: circular_r24;
+	-webkit-animation-duration: 2s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+}
+</style>
+</head>
+<body>
+<div class="path"></div>
+<div class="circle clockwise"></div>
+<div class="circle clockwise" style="-webkit-animation-delay: 0.1s"></div>
+<div class="circle clockwise" style="-webkit-animation-delay: 0.2s"></div>
+<div class="circle clockwise" style="-webkit-animation-delay: 0.3s"></div>
+<div class="circle clockwise" style="-webkit-animation-delay: 0.4s"></div>
+</body>
+</html>

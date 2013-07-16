@@ -1,0 +1,49 @@
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<style>
+@-webkit-keyframes ping {
+	0% { 
+		width:         32px; 
+		height:        32px;
+		border-radius: 32px;
+		margin-top:   -16px;
+		margin-left:  -16px;
+		border-width:  16px;
+		opacity: 1;
+	}
+	100% { 
+		width:         128px;
+		height:        128px;
+		border-radius: 128px;
+		margin-top:   -64px;
+		margin-left:  -64px;
+		border-width:  0px;
+		opacity: 0;
+	}
+}
+.circle {
+	position: absolute;
+	box-sizing: border-box;
+	border-style: solid;
+	border-color: black;
+	border-width: 0;
+}
+.circle.animate {
+	-webkit-animation-name: ping;
+	-webkit-animation-duration: 0.75s;
+}
+</style>
+</head>
+<body>
+	
+	<div class="circle"></div>
+
+<script>
+$(document).on('click',function(e){
+	$('.circle').css({'top':e.pageY,'left':e.pageX})
+	$('.circle').toggleClass('animate');
+});
+</script>
+</body>
+</html>

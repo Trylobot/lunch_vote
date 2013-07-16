@@ -1,0 +1,29 @@
+
+// http://stefanwienert.net/blog/2012/05/18/easy-css-vendor-prefix-mixin-for-sass/
+@mixin vendor-prefix($name, $argument) {
+  -webkit-#{$name}: $argument;
+  -khtml-#{$name}: $argument;
+  -moz-#{$name}: $argument;
+  -ms-#{$name}: $argument;
+  -o-#{$name}: $argument;
+  #{$name}: $argument;
+}
+// p {
+//   @include vendor-prefix(hyphens, auto)
+// }
+
+
+// https://github.com/thoughtbot/bourbon/issues/98
+@mixin vendor-keyframes($name) {
+  @-webkit-keyframes #{$name} { @content; }
+  @-khtml-keyframes #{$name} { @content; }
+  @-moz-keyframes #{$name} { @content; }
+  @-ms-keyframes #{$name} { @content; }
+  @-o-keyframes #{$name} { @content; }
+  @keyframes #{$name} { @content; }
+}
+// @include vendor-keyframes( sliding ) {
+//     0% { top: 0px; }
+//   100% { top: 20px; }
+// }
+

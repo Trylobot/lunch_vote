@@ -1,0 +1,5 @@
+
+requires sass, a ruby gem
+> sass style.scss:public/style.css
+
+
