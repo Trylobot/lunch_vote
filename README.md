@@ -9,17 +9,17 @@ http://lunchvote.net
 * jQuery
 * SCSS
 
-To perform first-time setup, make sure Node.js is installed somewhere and run install_server.bat. If you plan to debug the server, also run install_node-inspector.bat
+To perform first-time setup, make sure *Node.js* is installed somewhere and run *install_server.bat*. If you plan to debug the server, also run *install_node-inspector.bat*
 
-To start the server for development/testing, run start_server.bat. 
+To start the server for development/testing, run *start_server.bat*. 
 
-To debug server side, run debug_server.bat, run start_node-inspector.bat, then run shortcut "view_node-inspector"
+To debug server side, run *debug_server.bat*, run *start_node-inspector.bat*, then run shortcut *view_node-inspector*
 
-To make changes to the client-side javascript, edit src/*.js, then minify and save in public/*.min.js
+To make changes to the client-side javascript, edit _src/*.js_, then minify and save in _public/*.min.js_
 
-To make changes to the stylesheets, run watch_sass_style.bat, edit src/*.css, then minify resulting public/*.css and save in public/*.min.css
+To make changes to the stylesheets, run *watch_sass_style.bat*, edit _src/*.css_, then minify resulting _public/*.css_ and save in _public/*.min.css_
 
-To make changes to assets, edit directly in public/* (save psd sources in docs)
+To make changes to assets, edit directly in _public/*_ (save psd sources in _docs_)
 
-Data is stored in data/*
+Data is stored in _data/*_
 
