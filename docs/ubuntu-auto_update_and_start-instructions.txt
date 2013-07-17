@@ -1,4 +1,4 @@
-> sudo -u ubuntu ssh -i ~/.ssh/github_deploy_id
+> sudo -u ubuntu ssh -i ~/.ssh/aws_lunch_vote_github.pub
 
 > sudo nano /usr/bin/update_app.sh
 #!/bin/bash
