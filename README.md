@@ -9,7 +9,7 @@ http://lunchvote.net
 * jQuery
 * SCSS
 
-To perform first-time setup, make sure *Node.js* is installed somewhere and run *install_server.bat*. If you plan to debug the server, also run *install_node-inspector.bat*. If you plan to make changes to styles, make sure *Sass* is installed first.
+To perform first-time setup, copy *app.cfg.EXAMPLE.json* to *app.cfg.json* and make any desired changes. Make sure *Node.js* is installed somewhere and run *install_server.bat*. If you plan to debug the server, also run *install_node-inspector.bat*. If you plan to make changes to styles, make sure *Sass* is installed first.
 
 To start the server for development/testing, run *start_server.bat*. 
 
