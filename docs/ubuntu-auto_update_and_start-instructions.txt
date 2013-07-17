@@ -1,9 +1,8 @@
-
 > sudo -u ubuntu ssh -i ~/.ssh/github_deploy_id
 
 > sudo nano /usr/bin/update_app.sh
 #!/bin/bash
-cd /home/ubuntu/misc/lunch_vote_js
+cd /home/ubuntu/lunch_vote
 sudo -u ubuntu git fetch --all
 sudo -u ubuntu git reset --hard origin/master
 sudo npm install
