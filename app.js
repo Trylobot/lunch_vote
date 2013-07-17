@@ -18,9 +18,9 @@ mt = new mt.MersenneTwister19937;
 var cfg = JSON.parse( fs.readFileSync( 'app.cfg.json', 'utf8' ));
 
 // route utility
-function primary_host_check( host ) {
-	if( host == 'www.lunchvote.net' // normal
-	||  host == 'analytics.bizlitics.com' ) { // completely random, possibly previous domain owner
+function primary_host_check( request, response ) {
+	if( request.headers.host == 'www.lunchvote.net' // normal
+	||  request.headers.host == 'analytics.bizlitics.com' ) { // completely random, possibly previous domain owner
 		response.redirect( 301, 'http://lunchvote.net' );
 		return false;
 	} else {
@@ -31,13 +31,13 @@ function primary_host_check( host ) {
 // routes
 // index page
 app.get( '/', function( request, response ) {
-	if( !primary_host_check( request.headers.host ) )
+	if( !primary_host_check( request, response ) )
 		return;
 	response.sendfile( 'index.html' );
 });
 // status
 app.get('/health', function( request, response ) {
-	if( !primary_host_check( request.headers.host ) )
+	if( !primary_host_check( request, response ) )
 		return;
 	response.send({
 		version: '1.0.1',
@@ -48,7 +48,7 @@ app.get('/health', function( request, response ) {
 });
 // request to start a new group
 app.post( '/new', function( request, response ) {
-	if( !primary_host_check( request.headers.host ) )
+	if( !primary_host_check( request, response ) )
 		return;
 	var group_config = new GroupConfig();
 	group_config.id = generate_new_group_id();
@@ -57,7 +57,7 @@ app.post( '/new', function( request, response ) {
 });
 // vote page
 app.get( '/vote', function( request, response ) {
-	if( !primary_host_check( request.headers.host ) )
+	if( !primary_host_check( request, response ) )
 		return;
 	var group_id = is_valid_group_request( request );
 	if( group_id === false )
