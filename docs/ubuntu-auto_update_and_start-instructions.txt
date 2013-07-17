@@ -4,8 +4,8 @@
 > sudo nano /usr/bin/update_app.sh
 #!/bin/bash
 cd /home/ubuntu/lunch_vote
-sudo -u git git fetch --all
-sudo -u git git reset --hard origin/master
+git fetch --all
+git reset --hard origin/master
 sudo npm install
 sudo forever stopall
 sudo NODE_ENV=production forever start app.js
