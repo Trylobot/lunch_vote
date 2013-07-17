@@ -1,11 +1,11 @@
 > cd /home/ubuntu
-> git clone git@github.com:Trylobot/lunch_vote.git
+> sudo git clone git@github.com:Trylobot/lunch_vote.git
 
 > sudo nano /usr/bin/update_app.sh
 #!/bin/bash
 cd /home/ubuntu/lunch_vote
-git fetch --all
-git reset --hard origin/master
+sudo git fetch --all
+sudo git reset --hard origin/master
 sudo npm install
 sudo forever stopall
 sudo NODE_ENV=production forever start app.js
