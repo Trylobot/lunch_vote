@@ -17,27 +17,38 @@ mt = new mt.MersenneTwister19937;
 // config-file config
 var cfg = JSON.parse( fs.readFileSync( 'app.cfg.json', 'utf8' ));
 
+// route utility
+function primary_host_check( host ) {
+	if( host == 'www.lunchvote.net' // normal
+	||  host == 'analytics.bizlitics.com' ) { // completely random, possibly previous domain owner
+		response.redirect( 301, 'http://lunchvote.net' );
+		return false;
+	} else {
+		return true;
+	}
+}
+
 // routes
 // index page
 app.get( '/', function( request, response ) {
-	if( request.headers.host == 'analytics.bizlitics.com'
-	||  request.headers.host == 'www.lunchvote.net' )
-		response.redirect( 301, 'http://lunchvote.net' );
-	else
-		response.sendfile( 'index.html' );
+	if( !primary_host_check( request.headers.host ) )
+		return;
+	response.sendfile( 'index.html' );
 });
 // status
 app.get('/health', function( request, response ) {
-  response.send({
-  	version: '1.0.1',
-    pid: process.pid,
-    memory: process.memoryUsage(),
-    uptime: process.uptime()
-  })
+	if( !primary_host_check( request.headers.host ) )
+		return;
+	response.send({
+		version: '1.0.1',
+		pid: process.pid,
+		memory: process.memoryUsage(),
+		uptime: process.uptime()
+	})
 });
 // request to start a new group
 app.post( '/new', function( request, response ) {
-	if( request.headers.host == 'analytics.bizlitics.com' )
+	if( !primary_host_check( request.headers.host ) )
 		return;
 	var group_config = new GroupConfig();
 	group_config.id = generate_new_group_id();
@@ -46,14 +57,13 @@ app.post( '/new', function( request, response ) {
 });
 // vote page
 app.get( '/vote', function( request, response ) {
+	if( !primary_host_check( request.headers.host ) )
+		return;
 	var group_id = is_valid_group_request( request );
 	if( group_id === false )
 		response.send( 404 );
 	else {
-		if( request.headers.host == 'analytics.bizlitics.com' )
-			response.redirect( 301, 'http://lunchvote.net/vote?'+group_id );
-		else
-			response.sendfile( 'vote.html' );
+		response.sendfile( 'vote.html' );
 	}
 });
 // static fileserver

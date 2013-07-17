@@ -1,0 +1,6 @@
+{
+  "server_port": 80,
+  "default_poll_duration_min": 10,
+  "default_runoff_duration_min": 2,
+  "required_majority_pct": 50.00000001
+}
