@@ -1,0 +1,16 @@
+feature: differentiate between vote administrators and vote participants
+
+implementation:
+1. add functions to client-side js:
+  1. base62_encode from app.js
+  2. String.prototype.hashCode from http://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery
+2. in client, check for the presence of a URL fragment #
+  1. if present, check if its contents are equal to the following:
+    base62_encode(view_model.group_id.hashCode())
+  2. if present and correct, treat the user as an admin, and allow access to the 'start vote' and 'vote times' sections
+  3. else hide those sections
+3. in server, when redirecting the creator of a new vote page, include the admin code
+4. in client, if current user is admin, when clicking the share link, show a popup window with two buttons:
+  * share (admin)
+  * share (public)
+5. in client if current user is not admin, behave as before (send public link, immediate)
