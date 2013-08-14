@@ -1,6 +1,39 @@
 feature: differentiate between vote administrators and vote participants
 
-implementation:
+implementation D:
+(viable)
+1. create a new form of group_id that is different from the existing form, but that can map to values
+   in the existing form; it should be defined in a way that it won't collide with the existing group_id space
+     * check out, for example, http://crypto.stanford.edu/sjcl/
+2. when a request is received in this form, the mapping should be performed in order to fetch the actual data
+   but the user will be relegated to vote-participant status only
+   and the 'start vote' and 'vote times' sections should be disabled
+3. in client, if the user is an admin:
+   then when clicking the share link, show a popup window with two large image-buttons, each with descriptions:
+     * share (admin)
+     * share (public)
+   else behave as before; share public link directly
+
+implementation C:
+(on hold until solution to #5 found)
+1. allow for a new type of group which is empty except for a reference to an existing group
+2. if a reference group is requested:
+   then the requester should be treated as a participant-only, and the 'start vote' and 'vote times' sections should be disabled
+   else they are an admin and load as before;
+3. all existing urls will be preserved as admin groups
+4. whenever a group is created, a thin group file will be created at the same time
+5. write a new node.js script to process the existing group files and create reference groups for them
+   [PROBLEM] existing groups do not know what reference group refers to them
+
+implementation B:
+(scrapped for same reason as A: breaks existing urls by requiring knowledge of new endpoint)
+1. add url endpoint: "/admin"; maps to "vote.html" as with vote page
+2. expect argument signature identical to "/vote", except that the group_ID is expected to be encrypted
+3. decrypt the group_ID using a secret salt string (set in machine's config file) to get the actual group_ID
+4. for non-admin, block access to the 'start vote' and 'vote times' sections
+
+implementation A:
+(scrapped because it would cause anyone with an existing URL to permanently be demoted to a participant and unable to get admin)
 1. add functions to client-side js:
   1. base62_encode from app.js
   2. String.prototype.hashCode from http://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery
