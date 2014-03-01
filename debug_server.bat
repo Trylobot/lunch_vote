@@ -1,2 +1,2 @@
-node --debug app.js
+node --debug server.js
 pause

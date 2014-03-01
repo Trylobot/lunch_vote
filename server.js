@@ -19,13 +19,14 @@ var cfg = JSON.parse( fs.readFileSync( 'app.cfg.json', 'utf8' ));
 
 // route utility
 function primary_host_check( request, response ) {
-	if( request.headers.host == 'www.lunchvote.net' // normal
-	||  request.headers.host == 'analytics.bizlitics.com' ) { // completely random, possibly previous domain owner
-		response.redirect( 301, 'http://lunchvote.net' );
-		return false;
-	} else {
-		return true;
-	}
+	// if( request.headers.host == 'www.lunchvote.net' // normal
+	// ||  request.headers.host == 'analytics.bizlitics.com' ) { // completely random, possibly previous domain owner
+	// 	response.redirect( 301, 'http://lunchvote.net' );
+	// 	return false;
+	// } else {
+	//	return true;
+	// }
+	return true;
 }
 
 // routes
