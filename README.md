@@ -1,5 +1,6 @@
 lunch vote!
 ==========
+http://lunchvote.org
 
 * node.js
 * socket.io
